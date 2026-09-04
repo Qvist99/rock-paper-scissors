@@ -3,10 +3,26 @@ package se.iths.qvist99.rpsgame;
 import java.util.Scanner;
 import java.util.Set;
 
-public class InputHandler {
+public class GamePresenter {
     private final Scanner scanner = new Scanner(System.in);
+    private GameFrame gameFrame;
+    private final GameController gameController;
 
-    Choice userSelectChoice() {
+    public GamePresenter(GameController gameController) {
+        this.gameController = gameController;
+    }
+
+    public void setGameFrame(GameFrame gameFrame) {
+        this.gameFrame = gameFrame;
+    }
+
+    public void onGameLengthSelected(int firstTo) {
+        gameController.setFirstTo(firstTo);
+        IO.println("firstTo" + firstTo);
+        // Show next panel!!!!
+    }
+
+    public Choice userSelectChoice() {
         String prompt = "Select Rock, Paper or Scissor";
         String errorMessage = "Incorrect choice. Please choose between Rock, Paper or Scissor";
         Set<String> validInputs = Set.of("ROCK", "PAPER", "SCISSOR");
@@ -15,7 +31,7 @@ public class InputHandler {
         return Choice.valueOf(userInput);
     }
 
-    int setGameLength() {
+    public int setGameLength() {
         String prompt = "Select a difficulty: Short(First to 3), Normal(First to 5), Long(First to 7)";
         String errorMessage = "Incorrect game length selected. Please select Short,Normal or Long";
         Set<String> validValues = Set.of("SHORT", "NORMAL", "LONG");
@@ -47,8 +63,8 @@ public class InputHandler {
 
         return input;
     }
-    
-    private void checkIfTerminateGame(String value) {
+
+    private static void checkIfTerminateGame(String value) {
         if (value.equals("Q")) {
             System.out.println("Exiting game...");
             System.exit(0);

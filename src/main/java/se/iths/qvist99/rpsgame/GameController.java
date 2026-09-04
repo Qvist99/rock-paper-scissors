@@ -6,12 +6,12 @@ public class GameController {
     int firstTo, userScore, computerScore, currentRound;
     private final Random random = new Random();
 
-    InputHandler inputHandler = new InputHandler();
+
     Referee referee = new Referee();
 
     public void startGame() {
-        firstTo = inputHandler.setGameLength();
-        runGame();
+        /*firstTo = inputHandler.setGameLength();
+        runGame();*/
     }
 
 
@@ -21,7 +21,7 @@ public class GameController {
             System.out.println("Round: " + currentRound);
 
             Choice computerChoice = randomizeComputerChoice();
-            Choice userChoice = inputHandler.userSelectChoice();
+            Choice userChoice = Choice.ROCK; //inputHandler.userSelectChoice();
 
             System.out.println("User selects: " + userChoice + " PC selects: " + computerChoice);
 
@@ -47,6 +47,14 @@ public class GameController {
             System.out.println("Computer won the game!");
         }
 
+    }
+
+    //create methods for updating userchoice, gameLength
+
+
+    public void setFirstTo(int firstTo) {
+        this.firstTo = firstTo;
+        IO.println("First to set to" + firstTo);
     }
 
     private Choice randomizeComputerChoice() {
