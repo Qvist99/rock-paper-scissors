@@ -18,12 +18,14 @@ public class GamePresenter {
 
     public void onGameLengthSelected(int firstTo) {
         gameController.setFirstTo(firstTo);
+        gameFrame.setFirstToLabel(firstTo);
         IO.println("firstTo" + firstTo);
         // Show next panel
         gameFrame.selectPanel("PANEL_TWO");
     }
 
     public void onUserChoiceSelected(Choice userChoice) {
+        int firstTo = gameController.getFirstTo();
         // Set user choice for curr round > set random computer choice
 
         gameController.setUserChoice(userChoice);
@@ -33,29 +35,27 @@ public class GamePresenter {
         //Display the choice the user made and what the computer made either in new panel or in the same panel somehow
 
         // Determine to outcome of the round which in turn updates the score.
-        gameController.determineOutcome();
+        String outcome = gameController.determineOutcome();
+
+        Choice computerChoice = gameController.getComputerChoice();
+
+        gameFrame.showRoundOutcome(outcome, computerChoice, userChoice);
 
 
         //Update the score in the gameframe to represent the new values
 
-        int userScore = gameController.userScore;
-        int computerScore = gameController.computerScore;
+        int userScore = gameController.getUserScore();
+        int computerScore = gameController.getComputerScore();
 
-        gameFrame.alterScore(userScore, computerScore);
-
-
+        //Need to display in some way what the computer picked and who is the winner of the round if there is one
 
 
+        gameFrame.setCurrScore(userScore, computerScore);
 
-
-
-
-
-        /*
-         * Swap to display choices card to show who won the round: Either dynamic on panel 2 or display a new panel
-         * If we have a winner show panel end screen else return to panel 2
-         * */
-
+        //Swap to win screen and display winner of the game and give option to rematch or change game length
+        if (userScore >= firstTo || computerScore >= firstTo) {
+            IO.println("Netanyahu we have an winner");
+        }
 
     }
 

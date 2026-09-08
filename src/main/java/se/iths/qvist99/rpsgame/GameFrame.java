@@ -10,7 +10,15 @@ public class GameFrame extends JFrame {
     private final CardLayout cardLayout = new CardLayout();
     private final JPanel cards = new JPanel(cardLayout);
     private final Color bgColor = new Color(80, 90, 92);
+    private final Color highlightColor = new Color(184, 207, 229);
     private final GamePresenter presenter;
+    private final JLabel currScore = buildLabel("User 0 - 0 Computer", 16);
+    private final JLabel firstToLabel = buildLabel("First to 3 wins", 20);
+    private final JLabel outcomeLabel = buildLabel(" ", 14);
+    private final String[] rpsButtonContent = {"Rock", "Paper", "Scissor"};
+    private final JPanel rpsButtonPanel = createPanelButtons(rpsButtonContent, "", this::selectUserChoice);
+    //private final JLabel outcomeLabel =
+
 
     public GameFrame(GamePresenter presenter) {
         this.presenter = presenter;
@@ -36,8 +44,6 @@ public class GameFrame extends JFrame {
 
         add(cards);
         setVisible(true);
-
-
     }
 
 
@@ -48,7 +54,7 @@ public class GameFrame extends JFrame {
         mainPanel.add(Box.createVerticalStrut(220));
 
 
-        JLabel title = buildTitleLabel("Select how many round wins is required to win the game!");
+        JLabel title = buildLabel("Select how many round wins is required to win the game!", 20);
 
         mainPanel.add(title);
         mainPanel.add(Box.createVerticalStrut(20));
@@ -69,32 +75,36 @@ public class GameFrame extends JFrame {
 
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(bgColor);
-        //mainPanel.add(Box.createVerticalStrut(220));
+        mainPanel.add(Box.createVerticalStrut(10));
 
-        JLabel currScore = buildTitleLabel("User 0 - 1 Computer");
+
+        mainPanel.add(firstToLabel);
+
+        mainPanel.add(Box.createVerticalStrut(10));
 
         mainPanel.add(currScore);
 
-        String[] buttonContent = {"Rock", "Paper", "Scissor"};
-        JPanel buttonPanel = createPanelButtons(buttonContent, "", this::selectUserChoice);
+        mainPanel.add(Box.createVerticalStrut(100));
 
-        mainPanel.add(buttonPanel);
+        outcomeLabel.setVisible(true);
+        mainPanel.add(outcomeLabel);
+
+        mainPanel.add(Box.createVerticalStrut(120));
+
+
+        // Outcome label being displayed at each round end
+        mainPanel.add(rpsButtonPanel);
 
         return mainPanel;
 
     }
 
-    // Need later maybe
-    /*private JPanel buildMainPanel(){
-
-    }*/
-
-    private JLabel buildTitleLabel(String content) {
+    private JLabel buildLabel(String content, int fontSize) {
         JLabel title = new JLabel(content);
 
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         title.setForeground(Color.white);
-        title.setFont(new Font("SansSerif", Font.PLAIN, 20));
+        title.setFont(new Font("SansSerif", Font.PLAIN, fontSize));
 
         return title;
     }
@@ -139,10 +149,46 @@ public class GameFrame extends JFrame {
         cardLayout.show(cards, panelName);
     }
 
-    public void alterScore(int userScore, int computerScore) {
-        //Need to find the second panel and target the title created and alter it with a new value
+    public void setCurrScore(int userScore, int computerScore) {
+        currScore.setText("User " + userScore + " - " + computerScore + " Computer");
+    }
 
+    public void setFirstToLabel(int firstTo) {
+        firstToLabel.setText("First to " + firstTo + " wins the game");
+    }
 
+    public void showRoundOutcome(String outcome, Choice computerChoice, Choice userChoice) {
+        if (outcome.equals("Draw")) {
+            outcomeLabel.setText("Computer chose " + computerChoice + ". The round is a draw!");
+        } else {
+            outcomeLabel.setText("Computer chose " + computerChoice + ". " + outcome + " wins the round!");
+        }
+
+        setRpsButtonPanelButtonsEnabled(false, userChoice);
+
+        Timer timer = new Timer(4000, e -> {
+            outcomeLabel.setText(" ");
+            setRpsButtonPanelButtonsEnabled(true, userChoice);
+        });
+
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    private void setRpsButtonPanelButtonsEnabled(boolean enabled, Choice userChoice) {
+        for (Component component : rpsButtonPanel.getComponents()) {
+            if (component instanceof JButton button) {
+                button.setEnabled(enabled);
+                String buttonText = button.getText().toUpperCase().trim();
+
+                if (!enabled && buttonText.equalsIgnoreCase(userChoice.toString())) {
+                    button.setBackground(highlightColor);
+                } else if (enabled) {
+                    button.setBackground(bgColor);
+                }
+
+            }
+        }
     }
 
 

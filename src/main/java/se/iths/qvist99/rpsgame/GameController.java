@@ -3,9 +3,9 @@ package se.iths.qvist99.rpsgame;
 import java.util.Random;
 
 public class GameController {
-    int firstTo, userScore, computerScore, currentRound;
+    private int firstTo, userScore, computerScore, currentRound;
     private final Random random = new Random();
-    Choice userChoice, computerChoice;
+    private Choice userChoice, computerChoice;
 
     Referee referee = new Referee();
 
@@ -51,18 +51,20 @@ public class GameController {
 
     //create methods for updating userchoice, gameLength
 
-    public void determineOutcome() {
+    public String determineOutcome() {
         String outcome = referee.determineOutcome(userChoice, computerChoice);
 
         if (outcome.equals("Draw")) {
-            System.out.println("Round ends in a " + outcome);
-        } else if (outcome.equals("User")) {
-            System.out.println(outcome + " wins the round");
+            return outcome;
+        }
+
+        if (outcome.equals("User")) {
             userScore++;
         } else {
-            System.out.println(outcome + " wins the round");
             computerScore++;
         }
+
+        return outcome;
     }
 
     public void incrementRounds() {
@@ -88,5 +90,29 @@ public class GameController {
     public void randomizeComputerChoice() {
         Choice[] values = Choice.values();
         this.computerChoice = values[random.nextInt(values.length)];
+    }
+
+    public int getFirstTo() {
+        return firstTo;
+    }
+
+    public int getUserScore() {
+        return userScore;
+    }
+
+    public int getComputerScore() {
+        return computerScore;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public Choice getComputerChoice() {
+        return computerChoice;
+    }
+
+    public Choice getUserChoice() {
+        return computerChoice;
     }
 }
