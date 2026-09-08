@@ -5,7 +5,7 @@ import java.util.Random;
 public class GameController {
     int firstTo, userScore, computerScore, currentRound;
     private final Random random = new Random();
-
+    Choice userChoice, computerChoice;
 
     Referee referee = new Referee();
 
@@ -15,7 +15,7 @@ public class GameController {
     }
 
 
-    private void runGame() {
+    /*private void runGame() {
         do {
             currentRound++;
             System.out.println("Round: " + currentRound);
@@ -47,18 +47,46 @@ public class GameController {
             System.out.println("Computer won the game!");
         }
 
-    }
+    }*/
 
     //create methods for updating userchoice, gameLength
 
+    public void determineOutcome() {
+        String outcome = referee.determineOutcome(userChoice, computerChoice);
+
+        if (outcome.equals("Draw")) {
+            System.out.println("Round ends in a " + outcome);
+        } else if (outcome.equals("User")) {
+            System.out.println(outcome + " wins the round");
+            userScore++;
+        } else {
+            System.out.println(outcome + " wins the round");
+            computerScore++;
+        }
+    }
+
+    public void incrementRounds() {
+        currentRound++;
+    }
+
+    public void incrementUserScore() {
+        userScore++;
+    }
+
+    public void incrementComputerScore() {
+        computerScore++;
+    }
+
+    public void setUserChoice(Choice userChoice) {
+        this.userChoice = userChoice;
+    }
 
     public void setFirstTo(int firstTo) {
         this.firstTo = firstTo;
-        IO.println("First to set to" + firstTo);
     }
 
-    private Choice randomizeComputerChoice() {
+    public void randomizeComputerChoice() {
         Choice[] values = Choice.values();
-        return values[random.nextInt(values.length)];
+        this.computerChoice = values[random.nextInt(values.length)];
     }
 }

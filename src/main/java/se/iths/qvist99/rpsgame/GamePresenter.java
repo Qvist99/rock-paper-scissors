@@ -19,8 +19,46 @@ public class GamePresenter {
     public void onGameLengthSelected(int firstTo) {
         gameController.setFirstTo(firstTo);
         IO.println("firstTo" + firstTo);
-        // Show next panel!!!!
+        // Show next panel
+        gameFrame.selectPanel("PANEL_TWO");
     }
+
+    public void onUserChoiceSelected(Choice userChoice) {
+        // Set user choice for curr round > set random computer choice
+
+        gameController.setUserChoice(userChoice);
+
+        gameController.randomizeComputerChoice();
+
+        //Display the choice the user made and what the computer made either in new panel or in the same panel somehow
+
+        // Determine to outcome of the round which in turn updates the score.
+        gameController.determineOutcome();
+
+
+        //Update the score in the gameframe to represent the new values
+
+        int userScore = gameController.userScore;
+        int computerScore = gameController.computerScore;
+
+        gameFrame.alterScore(userScore, computerScore);
+
+
+
+
+
+
+
+
+
+        /*
+         * Swap to display choices card to show who won the round: Either dynamic on panel 2 or display a new panel
+         * If we have a winner show panel end screen else return to panel 2
+         * */
+
+
+    }
+
 
     public Choice userSelectChoice() {
         String prompt = "Select Rock, Paper or Scissor";
